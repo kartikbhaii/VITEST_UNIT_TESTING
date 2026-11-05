@@ -113,7 +113,7 @@ describe("examples.shippingCost", ()=>{
     {weight: 20, expected: 8.99},
   ])('charges $expected for weight $weight at boundries', ({weight, expected})=>{
     expect(shippingCost(weight)).toBe(expected)
-  }) 
+  })
 
   it('applies FREESHIPPING coupon exactly', ()=>{
     expect(shippingCost(1, "FREESHIPPING")).toBe(0)
