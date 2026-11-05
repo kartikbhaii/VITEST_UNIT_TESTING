@@ -1,5 +1,5 @@
 import { describe, it, expect, test } from "vitest";
-import { longestString, isPrime } from "../src/examples";
+import { longestString, isPrime, shippingCost } from "../src/examples";
 
 describe("examples.longestString", () => {
   test("returns a longest string", () => {
@@ -90,6 +90,56 @@ describe("examples.isPrime", ()=>{
       const badCall = () => isPrime('abc')
       expect(badCall).toThrow()
     })
+})
 
+describe("examples.shippingCost", ()=>{
+
+  // it('returns a number', () => {
+  //   expect(shippingCost(2)).toBeTypeOf('number')
+  // })
+
+  it.each([
+    {weight: 0.5, expected: 3.99},
+    {weight: 4, expected: 5.99},
+    {weight: 8, expected: 8.99},
+    {weight: 78, expected: 14.99}
+  ])('charges $expected for weight $weight', ({weight, expected})=>{
+    expect(shippingCost(weight)).toBe(expected)
+  })
+
+  it.each([
+    {weight: 1, expected: 3.99},
+    {weight: 5, expected: 5.99},
+    {weight: 20, expected: 8.99},
+  ])('charges $expected for weight $weight at boundries', ({weight, expected})=>{
+    expect(shippingCost(weight)).toBe(expected)
+  }) 
+
+  it('applies FREESHIPPING coupon exactly', ()=>{
+    expect(shippingCost(1, "FREESHIPPING")).toBe(0)
+    expect(shippingCost(30, "FREESHIPPING")).toBe(0)
+  })
+
+  it('ignores non-matching coupons', () => {
+    expect(shippingCost(1, 'freeshipping')).toBe(3.99)
+    expect(shippingCost(1, 'Nothing')).toBe(3.99)
+    expect(shippingCost(1)).toBe(3.99)
+  })
+
+  it('throws an error for invalid weights', ()=> {
+    expect(()=>shippingCost('abc')).toThrow() 
+    expect(()=>shippingCost(0)).toThrow() 
+    expect(()=>shippingCost(-5)).toThrow() 
+    expect(()=>shippingCost('2')).toThrow() 
+  })
+
+  it('throws when coupon is not a string', ()=>{
+    expect(()=> shippingCost(1, 123)).toThrow()
+    expect(()=> shippingCost(1, null)).toThrow()
+  })
 
 })
+
+
+
+
